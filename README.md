@@ -1,27 +1,117 @@
-# SMUI Rollup Example
+After installing and loading the RXDB plus GraphQL libraries, and then building I see these errors:
 
-An example project implementing [Svelte Material UI](https://github.com/hperrin/svelte-material-ui) with [Rollup](https://github.com/rollup/rollup). (Using the Advanced Styling Method.)
+```
+$ yarn build
+yarn run v1.22.10
+$ rollup -c rollup.config.js
 
-# Get it Running
+index.js → dist/bundle.js...
+(!) Missing shims for Node.js built-ins
+Creating a browser bundle that depends on 'events' and 'util'. You might need to include https://github.com/ionic-team/rollup-plugin-node-polyfills
+(!) `this` has been rewritten to `undefined`
+https://rollupjs.org/guide/en/#error-this-is-undefined
+node_modules/event-reduce-js/dist/es/util.js
+1: var __read = (this && this.__read) || function (o, n) {
+                 ^
+2:     var m = typeof Symbol === "function" && o[Symbol.iterator];
+3:     if (!m) return o;
+...and 3 other occurrences
+node_modules/binary-decision-diagram/dist/es/create-bdd-from-truth-table.js
+1: var __values = (this && this.__values) || function(o) {
+                   ^
+2:     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+3:     if (m) return m.call(o);
+...and 3 other occurrences
+node_modules/binary-decision-diagram/dist/es/leaf-node.js
+1: var __extends = (this && this.__extends) || (function () {
+                    ^
+2:     var extendStatics = function (d, b) {
+3:         extendStatics = Object.setPrototypeOf ||
+...and 1 other occurrence
 
-1. Clone the repo.
-2. `npm install`
-3. `npm run build`
-4. `npm run serve`
-5. http://localhost:5000
+...and 5 other files
+(!) Plugin node-resolve: preferring built-in module 'util' over local alternative at '/home/chrisdawson/Projects/ForkyBook/javascript-overlay/smui-example-rollup/node_modules/util/util.js', pass 'preferBuiltins: false' to disable this behavior or 'preferBuiltins: true' to disable this warning
+(!) Plugin node-resolve: preferring built-in module 'events' over local alternative at 'events', pass 'preferBuiltins: false' to disable this behavior or 'preferBuiltins: true' to disable this warning
+(!) Unresolved dependencies
+https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
+graphql/language/printer (imported by graphql/language/printer?commonjs-external, node_modules/subscriptions-transport-ws/dist/client.js)
+graphql/utilities/getOperationAST (imported by graphql/utilities/getOperationAST?commonjs-external, node_modules/subscriptions-transport-ws/dist/client.js)
+util (imported by node_modules/generate-function/index.js, util?commonjs-external)
+events (imported by node_modules/pouchdb-core/lib/index.es.js, node_modules/pouchdb-utils/lib/index-browser.es.js)
+(!) Circular dependencies
+node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseOneOf.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js
+node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseOneOf.js -> /home/chrisdawson/Projects/ForkyBook/javascript-overlay/smui-example-rollup/node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js?commonjs-proxy -> node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js
+node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseType.js -> node_modules/get-graphql-from-jsonschema/build/lib/handleArrayType.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js
+node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseType.js -> node_modules/get-graphql-from-jsonschema/build/lib/handleObjectType.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js
+(!) Missing global variable names
+Use output.globals to specify browser global variable names corresponding to external modules
+graphql/language/printer (guessing 'printer')
+graphql/utilities/getOperationAST (guessing 'getOperationAST')
+events (guessing 'EE')
+util (guessing 'util')
+created dist/bundle.js in 9.1s
+Done in 9.41s.
+```
 
-# License
+Fixing this with rollup-plugin-polyfill-node
 
-Copyright 2021 Hunter Perrin
+```
+$ yarn build
+yarn run v1.22.10
+$ rollup -c rollup.config.js
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+index.js → dist/bundle.js...
+(!) `this` has been rewritten to `undefined`
+https://rollupjs.org/guide/en/#error-this-is-undefined
+node_modules/subscriptions-transport-ws/dist/client.js
+1: "use strict";
+2: var __assign = (this && this.__assign) || function () {
+                   ^
+3:     __assign = Object.assign || function(t) {
+4:         for (var s, i = 1, n = arguments.length; i < n; i++) {
+...and 7 other occurrences
+node_modules/event-reduce-js/dist/es/util.js
+1: var __read = (this && this.__read) || function (o, n) {
+                 ^
+2:     var m = typeof Symbol === "function" && o[Symbol.iterator];
+3:     if (!m) return o;
+...and 3 other occurrences
+node_modules/binary-decision-diagram/dist/es/create-bdd-from-truth-table.js
+1: var __values = (this && this.__values) || function(o) {
+                   ^
+2:     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+3:     if (m) return m.call(o);
+...and 3 other occurrences
 
-    http://www.apache.org/licenses/LICENSE-2.0
+...and 6 other files
+(!) Circular dependencies
+polyfill-node:global.js -> polyfill-node:global.js
+node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseOneOf.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js
+node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseOneOf.js -> /home/chrisdawson/tmp/ser/node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js?commonjs-proxy -> node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js
+node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseType.js -> node_modules/get-graphql-from-jsonschema/build/lib/handleArrayType.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js
+node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseType.js -> node_modules/get-graphql-from-jsonschema/build/lib/handleObjectType.js -> node_modules/get-graphql-from-jsonschema/build/lib/parseSchema.js
+[!] Error: 'default' is not exported by node_modules/clone/clone.js, imported by node_modules/rxdb/dist/es/util.js
+https://rollupjs.org/guide/en/#error-name-is-not-exported-by-module
+node_modules/rxdb/dist/es/util.js (6:9)
+4:  */
+5: import randomToken from 'random-token';
+6: import { default as deepClone } from 'clone';
+            ^
+7: /**
+8:  * Returns an error that indicates that a plugin is missing
+Error: 'default' is not exported by node_modules/clone/clone.js, imported by node_modules/rxdb/dist/es/util.js
+    at error (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:5305:30)
+    at Module.error (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:9750:16)
+    at Module.traceVariable (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:10138:29)
+    at ModuleScope.findVariable (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:8899:39)
+    at FunctionScope.findVariable (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:2647:38)
+    at ChildScope.findVariable (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:2647:38)
+    at Identifier.bind (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:4035:40)
+    at CallExpression.bind (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:2734:23)
+    at CallExpression.bind (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:6761:15)
+    at ReturnStatement.bind (/home/chrisdawson/tmp/ser/node_modules/rollup/dist/shared/rollup.js:2734:23)
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+
+```
