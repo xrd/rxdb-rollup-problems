@@ -25,6 +25,8 @@
   },
   "dependencies": {
     "postcss": "^8.2.13",
-    "rxdb": "^9.18.0"
+    "rxdb": "^9.18.0",
+    "rxjs": "^6.6.7",
+    "subscriptions-transport-ws": "^0.9.18"
   }
 }
