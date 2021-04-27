@@ -1,3 +1,25 @@
+(this repository is forked from https://github.com/hperrin/smui-example-rollup/)
+
+Overview of steps to reproduce the error:
+
+1. Install svelte, rollup
+2. Add rxdb, graphql, subscriptions transport libraries
+3. Load rxdb
+4. Load graphql plugins
+5. See errors for events (globals)
+6. Try to fix with rollup-plugin-polyfill-node.
+7. See the errors where rxdb is importing `import { default as deepClone } from 'clone';` and crashing in build.
+
+Commands to reproduce:
+
+1. `git checkout bb60f1cd23ab2622d1468b32e35133c78f196b04 && yarn build` (works great)
+2. `git checkout 55c7a3e351a7e96707dd85ac72e153fb874d3681 && yarn build` (works great)
+3. `git checkout 63a8d6ac3aa030db87b14488642b8248f2282fb7 && yarn build` (now it complains of missing shims, needs node-polyfill)
+4. `git checkout b6a4eca8bbb3d85959aabceb2ad2e5d062bf1e11 && yarn build` (now error with default missing from clone.js)
+
+
+## Missing Shim Errors ##
+
 After installing and loading the RXDB plus GraphQL libraries, and then building I see these errors:
 
 ```
@@ -52,6 +74,8 @@ util (guessing 'util')
 created dist/bundle.js in 9.1s
 Done in 9.41s.
 ```
+
+## Missing Default in Clone.js ##
 
 Fixing this with rollup-plugin-polyfill-node
 
