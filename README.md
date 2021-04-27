@@ -20,7 +20,7 @@ Commands to reproduce:
 
 ## Missing Shim Errors ##
 
-After installing and loading the RXDB plus GraphQL libraries, and then building I see these errors:
+After installing and loading the RXDB plus GraphQL libraries, and then building I see these warnings where it tries to guess what to use for events, etc. It crashes when I run the generated code in the browser:
 
 ```
 $ yarn build
