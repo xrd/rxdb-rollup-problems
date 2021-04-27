@@ -12,10 +12,10 @@ Overview of steps to reproduce the error:
 
 Commands to reproduce:
 
-1. `git checkout bb60f1cd23ab2622d1468b32e35133c78f196b04 && yarn build` (works great)
-2. `git checkout 55c7a3e351a7e96707dd85ac72e153fb874d3681 && yarn build` (works great)
-3. `git checkout 63a8d6ac3aa030db87b14488642b8248f2282fb7 && yarn build` (now it complains of missing shims, needs node-polyfill)
-4. `git checkout b6a4eca8bbb3d85959aabceb2ad2e5d062bf1e11 && yarn build` (now error with default missing from clone.js)
+1. `git checkout bb60f1cd23ab2622d1468b32e35133c78f196b04 && yarn build` (no rxdb; works great)
+2. `git checkout 55c7a3e351a7e96707dd85ac72e153fb874d3681 && yarn build` (add rxdb; works great)
+3. `git checkout 63a8d6ac3aa030db87b14488642b8248f2282fb7 && yarn build` (add graphql plugins, load them up; now it complains of missing shims, needs node-polyfill)
+4. `git checkout b6a4eca8bbb3d85959aabceb2ad2e5d062bf1e11 && yarn build` (polyfill fixes; now error with default missing from clone.js)
 
 
 ## Missing Shim Errors ##
